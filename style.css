@@ -937,6 +937,150 @@ button {
     margin-top: auto;
 }
 
+/* =========================================================
+   BACHELOR THESIS
+========================================================= */
+
+#thesis {
+    position: relative;
+}
+
+#thesis::before {
+    position: absolute;
+    top: 80px;
+    right: -120px;
+
+    width: 320px;
+    height: 320px;
+
+    border-radius: 50%;
+
+    background-color: rgba(140, 114, 255, 0.08);
+
+    filter: blur(90px);
+
+    content: "";
+
+    pointer-events: none;
+}
+
+#thesis .section-heading h2 {
+    max-width: 900px;
+}
+
+#thesis .section-description {
+    position: relative;
+    z-index: 1;
+
+    max-width: 760px;
+}
+
+#thesis .resume-grid {
+    position: relative;
+    z-index: 1;
+
+    gap: 26px;
+}
+
+#thesis .resume-column {
+    position: relative;
+
+    overflow: hidden;
+
+    border-color: rgba(255, 101, 195, 0.18);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 101, 195, 0.06),
+            rgba(140, 114, 255, 0.05)
+        ),
+        var(--background-card);
+
+    transition:
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+#thesis .resume-column:hover {
+    border-color: rgba(255, 101, 195, 0.45);
+
+    box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.3);
+
+    transform: translateY(-5px);
+}
+
+#thesis .resume-column::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--accent),
+            var(--accent-purple)
+        );
+
+    content: "";
+}
+
+#thesis .resume-column > h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#thesis .resume-column > h3::before {
+    display: inline-block;
+
+    width: 10px;
+    height: 10px;
+
+    border-radius: 2px;
+
+    background-color: var(--accent);
+
+    box-shadow:
+        0 0 12px rgba(255, 101, 195, 0.45);
+
+    content: "";
+}
+
+#thesis .resume-entry {
+    border-left-color: rgba(140, 114, 255, 0.32);
+}
+
+#thesis .resume-entry::before {
+    background-color: var(--accent-purple);
+}
+
+#thesis .resume-date {
+    color: var(--accent-light);
+}
+
+#thesis .resume-place {
+    color: var(--accent-light);
+}
+
+#thesis .resume-entry p:not(.resume-place) {
+    color: var(--text-muted);
+}
+
+#thesis .resume-entry h4 {
+    color: var(--text);
+
+    font-size: 1.22rem;
+}
+
+#thesis .resume-entry p {
+    max-width: 540px;
+}
 
 /* =========================================================
    RESUME
