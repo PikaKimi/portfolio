@@ -1605,3 +1605,189 @@ button {
         transform: none;
     }
 }
+
+/* =========================================================
+   INKTOBER 2026
+========================================================= */
+
+.inktober-section {
+    position: relative;
+}
+
+.inktober-section::before {
+    position: absolute;
+    top: 160px;
+    left: -180px;
+    width: 360px;
+    height: 360px;
+    border-radius: 50%;
+    background-color: rgba(255, 101, 195, 0.06);
+    content: "";
+    filter: blur(100px);
+    pointer-events: none;
+}
+
+.inktober-intro {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 50px;
+    margin-bottom: 60px;
+}
+
+.inktober-intro-text {
+    max-width: 700px;
+}
+
+.inktober-intro-text p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    line-height: 1.8;
+}
+
+.inktober-intro-text p + p {
+    margin-top: 18px;
+}
+
+.inktober-facts {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.inktober-fact {
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-small);
+    background-color: var(--background-card);
+}
+
+.inktober-fact span {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.inktober-fact strong {
+    color: var(--text);
+    font-size: 0.95rem;
+}
+
+.inktober-gallery {
+    display: grid;
+    gap: 35px;
+}
+
+.inktober-day {
+    padding: 26px;
+    border: 1px solid rgba(255, 101, 195, 0.15);
+    border-radius: var(--radius-medium);
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 101, 195, 0.04),
+            rgba(140, 114, 255, 0.04)
+        ),
+        var(--background-card);
+    box-shadow: var(--shadow-small);
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.inktober-day:hover {
+    border-color: var(--border-accent);
+    box-shadow: var(--shadow-large);
+    transform: translateY(-4px);
+}
+
+.inktober-day-header {
+    margin-bottom: 20px;
+}
+
+.inktober-day-header span {
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.inktober-day-header h3 {
+    margin-top: 5px;
+    color: var(--text);
+    font-size: 1.4rem;
+}
+
+.inktober-comparison {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.inktober-comparison figure {
+    margin: 0;
+}
+
+.inktober-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.025);
+}
+
+.inktober-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.inktober-image.pixel-image img {
+    padding: 25px;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    object-fit: contain;
+}
+
+.inktober-comparison figcaption {
+    margin-top: 10px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+@media (max-width: 800px) {
+    .inktober-intro {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .inktober-facts {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .inktober-comparison {
+        grid-template-columns: 1fr;
+    }
+
+    .inktober-facts {
+        grid-template-columns: 1fr;
+    }
+
+    .inktober-day {
+        padding: 18px;
+    }
+}
+
