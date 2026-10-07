@@ -1,1082 +1,1793 @@
-<!DOCTYPE html>
-<html lang="en">
+/* =========================================================
+   ROOT VARIABLES
+========================================================= */
+
+:root {
+    --background: #0d0d15;
+    --background-soft: #13131e;
+    --background-card: #181824;
+    --background-card-hover: #1d1d2b;
+    --text: #f7f4ff;
+    --text-muted: #aaa6b8;
+    --text-dark: #161019;
+    --accent: #ff65c3;
+    --accent-light: #ff9bd8;
+    --accent-purple: #8c72ff;
+    --border: rgba(255, 255, 255, 0.1);
+    --border-accent: rgba(255, 101, 195, 0.42);
+    --shadow-small: 0 12px 35px rgba(0, 0, 0, 0.22);
+    --shadow-large: 0 30px 80px rgba(0, 0, 0, 0.35);
+    --content-width: 1180px;
+    --header-height: 76px;
+    --radius-small: 10px;
+    --radius-medium: 18px;
+    --radius-large: 26px;
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: var(--header-height);
+}
+
+body {
+    min-width: 320px;
+    color: var(--text);
+    background: radial-gradient( circle at 85% 8%, rgba(140, 114, 255, 0.15), transparent 28rem ), radial-gradient( circle at 12% 35%, rgba(255, 101, 195, 0.09), transparent 30rem ), var(--background);
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+    body.menu-open {
+        overflow: hidden;
+    }
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+button {
+    color: inherit;
+    font: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+a,
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+/* =========================================================
+   GENERAL UTILITIES
+========================================================= */
+
+.section {
+    width: min( calc(100% - 40px), var(--content-width) );
+    margin: 0 auto;
+    padding: 120px 0;
+}
+
+.section-heading {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    align-items: start;
+    gap: 35px;
+    margin-bottom: 52px;
+}
+
+    .section-heading > div {
+        padding-top: 8px;
+    }
+
+.section-number {
+    color: var(--accent);
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+}
+
+.section-label {
+    margin-top: 4px;
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.section-heading h2 {
+    max-width: 850px;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 1;
+    letter-spacing: -0.055em;
+}
+
+.section-description {
+    max-width: 720px;
+    margin-top: -20px;
+    margin-bottom: 46px;
+    margin-left: 215px;
+    color: var(--text-muted);
+    font-size: 1.02rem;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-bottom: 1px solid var(--border);
+    background-color: rgba(13, 13, 21, 0.78);
+    backdrop-filter: blur(18px);
+    transition: background-color 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.header-scrolled {
+    border-bottom-color: rgba(255, 101, 195, 0.17);
+    background-color: rgba(13, 13, 21, 0.95);
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.26);
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: min( calc(100% - 40px), var(--content-width) );
+    height: var(--header-height);
+    margin: 0 auto;
+}
+
+.logo {
+    position: relative;
+    z-index: 1002;
+    color: var(--accent);
+    font-size: 1.2rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+    .logo:hover {
+        color: var(--accent-light);
+        transform: translateY(-2px);
+    }
+
+.navigation {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+    .navigation a {
+        position: relative;
+        color: var(--text-muted);
+        font-size: 0.88rem;
+        font-weight: 700;
+        transition: color 0.2s ease;
+    }
+
+        .navigation a::after {
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent);
+            content: "";
+            transition: width 0.22s ease;
+        }
+
+        .navigation a:hover,
+        .navigation a.active {
+            color: var(--text);
+        }
+
+            .navigation a:hover::after,
+            .navigation a.active::after {
+                width: 100%;
+            }
+
+
+/* =========================================================
+   MOBILE MENU BUTTON
+========================================================= */
+
+.menu-button {
+    position: relative;
+    z-index: 1002;
+    display: none;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-small);
+    background-color: rgba(255, 255, 255, 0.03);
+    cursor: pointer;
+}
+
+    .menu-button span {
+        position: absolute;
+        left: 10px;
+        width: 20px;
+        height: 2px;
+        border-radius: 10px;
+        background-color: var(--text);
+        transition: top 0.25s ease, transform 0.25s ease, opacity 0.25s ease;
+    }
+
+        .menu-button span:nth-child(1) {
+            top: 12px;
+        }
+
+        .menu-button span:nth-child(2) {
+            top: 19px;
+        }
+
+        .menu-button span:nth-child(3) {
+            top: 26px;
+        }
+
+    .menu-button.active span:nth-child(1) {
+        top: 19px;
+        transform: rotate(45deg);
+    }
+
+    .menu-button.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-button.active span:nth-child(3) {
+        top: 19px;
+        transform: rotate(-45deg);
+    }
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+    position: relative;
+    display: grid;
+    min-height: 100vh;
+    place-items: center;
+    padding: 130px 24px 90px;
+    overflow: hidden;
+    text-align: center;
+}
+
+    .hero::before {
+        position: absolute;
+        inset: 0;
+        opacity: 0.22;
+        background-image: linear-gradient( rgba(255, 255, 255, 0.05) 1px, transparent 1px ), linear-gradient( 90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px );
+        background-size: 44px 44px;
+        content: "";
+        mask-image: linear-gradient( to bottom, black, transparent 88% );
+    }
+
+    .hero::after {
+        position: absolute;
+        top: 20%;
+        left: 50%;
+        width: 580px;
+        height: 580px;
+        border-radius: 50%;
+        background-color: rgba(255, 101, 195, 0.08);
+        content: "";
+        filter: blur(110px);
+        transform: translateX(-50%);
+        pointer-events: none;
+    }
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 980px;
+}
+
+.eyebrow {
+    color: var(--accent);
+    font-size: 0.73rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+    .eyebrow span {
+        display: inline-block;
+        margin: 0 10px;
+        color: var(--accent-purple);
+    }
+
+.hero-title {
+    margin-top: 22px;
+    font-size: clamp(3.7rem, 10vw, 8rem);
+    line-height: 0.94;
+    letter-spacing: -0.075em;
+}
+
+    .hero-title span {
+        display: block;
+        color: var(--accent);
+    }
+
+.hero-description {
+    max-width: 720px;
+    margin: 32px auto 0;
+    color: var(--text-muted);
+    font-size: clamp(1rem, 2vw, 1.26rem);
+}
+
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 40px;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 54px;
+    padding: 0 27px;
+    border: 2px solid var(--accent);
+    border-radius: var(--radius-small);
+    font-size: 0.92rem;
+    font-weight: 800;
+    transition: color 0.2s ease, transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .button:hover {
+        transform: translateY(-3px);
+    }
+
+.button-primary {
+    color: var(--text-dark);
+    background-color: var(--accent);
+    box-shadow: 0 12px 35px rgba(255, 101, 195, 0.2);
+}
+
+    .button-primary:hover {
+        background-color: var(--accent-light);
+        box-shadow: 0 16px 42px rgba(255, 101, 195, 0.3);
+    }
+
+.button-secondary {
+    color: var(--accent);
+    background-color: rgba(255, 255, 255, 0.025);
+}
+
+    .button-secondary:hover {
+        color: var(--accent-light);
+        background-color: rgba(255, 101, 195, 0.08);
+    }
+
+.button-text {
+    border-color: transparent;
+    color: var(--text-muted);
+    background-color: transparent;
+}
+
+    .button-text:hover {
+        color: var(--text);
+        background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    .button-text span {
+        margin-left: 6px;
+        transition: transform 0.2s ease;
+    }
+
+    .button-text:hover span {
+        transform: translateX(4px);
+    }
+
+
+/* =========================================================
+   SCROLL INDICATOR
+========================================================= */
+
+.scroll-indicator {
+    position: absolute;
+    z-index: 3;
+    bottom: 30px;
+    left: 50%;
+    width: 27px;
+    height: 44px;
+    border: 2px solid var(--accent);
+    border-radius: 20px;
+    transform: translateX(-50%);
+}
+
+    .scroll-indicator > span {
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        width: 4px;
+        height: 8px;
+        border-radius: 10px;
+        background-color: var(--accent);
+        animation: scroll-dot 1.8s infinite;
+        transform: translateX(-50%);
+    }
+
+@keyframes scroll-dot {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 0);
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, 15px);
+    }
+}
+
+
+/* =========================================================
+   DECORATIVE PIXELS
+========================================================= */
+
+.hero-background {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.pixel {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    background-color: var(--accent);
+    box-shadow: 0 0 18px rgba(255, 101, 195, 0.8);
+    animation: float-pixel 5s ease-in-out infinite;
+}
+
+.pixel-one {
+    top: 24%;
+    left: 14%;
+}
+
+.pixel-two {
+    top: 18%;
+    right: 18%;
+    animation-delay: 1s;
+}
+
+.pixel-three {
+    right: 13%;
+    bottom: 27%;
+    animation-delay: 2s;
+}
+
+.pixel-four {
+    bottom: 23%;
+    left: 20%;
+    animation-delay: 1.4s;
+}
+
+.pixel-five {
+    top: 44%;
+    right: 30%;
+    width: 5px;
+    height: 5px;
+    animation-delay: 0.5s;
+}
+
+@keyframes float-pixel {
+    0%, 100% {
+        opacity: 0.35;
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(-18px) rotate(90deg);
+    }
+}
+
+
+/* =========================================================
+   MOUSE GLOW
+========================================================= */
+
+.mouse-glow {
+    position: fixed;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 360px;
+    height: 360px;
+    border-radius: 50%;
+    background-color: rgba(255, 101, 195, 0.07);
+    filter: blur(80px);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+}
+
+
+/* =========================================================
+   FEATURED PROJECT
+========================================================= */
+
+.featured-section {
+    padding-top: 140px;
+}
+
+.featured-project {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-large);
+    background-color: var(--background-card);
+    box-shadow: var(--shadow-large);
+}
+
+.featured-image {
+    position: relative;
+    min-height: 560px;
+    overflow: hidden;
+    background-color: #11111a;
+}
+
+  .featured-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 560px;
+
+    padding: 30px;
+
+    background: #11111a;
+}
+
+.featured-image img {
+    width: 100%;
+    height: auto;
+
+    object-fit: contain;
+
+    transition:
+        transform 0.6s ease,
+        filter 0.6s ease;
+}
+
+    .featured-image::after {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient( to top, rgba(0, 0, 0, 0.38), transparent 55% );
+        content: "";
+        pointer-events: none;
+    }
+
+    .featured-image:hover img {
+        transform: scale(1.04);
+    }
+
+.featured-content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    padding: clamp(38px, 5vw, 68px);
+}
+
+.project-role {
+    color: var(--accent);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.featured-content h3 {
+    margin: 12px 0 20px;
+    font-size: clamp(2rem, 4vw, 3.3rem);
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+}
+
+.featured-content > p:not(.project-role) {
+    color: var(--text-muted);
+}
+
+.featured-content > p + p {
+    margin-top: 14px;
+}
+
+.project-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 100%;
+    margin-top: 30px;
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+    .project-details div {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .project-details span {
+        color: var(--text-muted);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    .project-details strong {
+        margin-top: 3px;
+        font-size: 0.96rem;
+    }
+
+
+/* =========================================================
+   PROJECT BADGES AND IMAGE ACTIONS
+========================================================= */
+
+.project-badge {
+    position: absolute;
+    z-index: 3;
+    top: 18px;
+    left: 18px;
+    padding: 7px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.65);
+    font-size: 0.67rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    backdrop-filter: blur(7px);
+}
+
+.image-action {
+    position: absolute;
+    z-index: 3;
+    right: 18px;
+    bottom: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 9px 13px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 999px;
+    color: var(--text);
+    background-color: rgba(0, 0, 0, 0.62);
+    font-size: 0.76rem;
+    font-weight: 800;
+    backdrop-filter: blur(7px);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.featured-image:hover .image-action,
+.project-image:hover .image-action {
+    background-color: rgba(255, 101, 195, 0.82);
+    transform: translateY(-3px);
+}
+
+
+/* =========================================================
+   TAGS AND PROJECT LINKS
+========================================================= */
+
+.project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 26px 0;
+}
+
+    .project-tags li {
+        padding: 6px 10px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        color: var(--text-muted);
+        background-color: rgba(255, 255, 255, 0.025);
+        font-size: 0.72rem;
+    }
+
+.project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--accent);
+    font-weight: 800;
+}
+
+    .project-link span {
+        display: inline-block;
+        transition: transform 0.2s ease;
+    }
+
+    .project-link:hover {
+        color: var(--accent-light);
+    }
+
+        .project-link:hover span {
+            transform: translate(3px, -3px);
+        }
+
+
+/* =========================================================
+   ABOUT
+========================================================= */
+
+.about-layout {
+    display: grid;
+    grid-template-columns: 1.35fr 0.8fr;
+    align-items: center;
+    gap: 80px;
+}
+
+.about-text {
+    color: var(--text-muted);
+}
+
+    .about-text p + p {
+        margin-top: 18px;
+    }
+
+.about-introduction {
+    color: var(--text);
+    font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+    font-weight: 800;
+    line-height: 1.35;
+    letter-spacing: -0.03em;
+}
+
+.about-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 32px;
+}
+
+.profile-card {
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-medium);
+    background-color: var(--background-card);
+    box-shadow: var(--shadow-large);
+    transform: rotate(2deg);
+    transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+    .profile-card:hover {
+        border-color: var(--border-accent);
+        transform: rotate(0deg) translateY(-5px);
+    }
+
+.profile-image {
+    position: relative;
+    min-height: 360px;
+    overflow: hidden;
+    border-radius: 13px;
+    background-color: #11111a;
+}
+
+    .profile-image img {
+        width: 100%;
+        height: 100%;
+        min-height: 360px;
+        object-fit: cover;
+        object-position: center top;
+        transition: transform 0.45s ease;
+    }
+
+.profile-card:hover .profile-image img {
+    transform: scale(1.04);
+}
+
+.profile-card figcaption {
+    display: flex;
+    flex-direction: column;
+    padding-top: 16px;
+}
+
+    .profile-card figcaption strong {
+        font-size: 1.17rem;
+    }
+
+    .profile-card figcaption span {
+        color: var(--text-muted);
+        font-size: 0.88rem;
+    }
+
+
+/* =========================================================
+   PROJECT GRID
+========================================================= */
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+.project-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-medium);
+    background-color: var(--background-card);
+    transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+    .project-card:hover {
+        border-color: var(--border-accent);
+        background-color: var(--background-card-hover);
+        box-shadow: var(--shadow-large);
+        transform: translateY(-7px);
+    }
+
+    .project-card:last-child {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+.project-image {
+    position: relative;
+    min-height: 310px;
+    overflow: hidden;
+    background-color: #11111a;
+}
+
+.project-card:last-child .project-image {
+    min-height: 430px;
+}
+
+.project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.5s ease;
+}
+
+.project-image::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient( to top, rgba(0, 0, 0, 0.38), transparent 58% );
+    content: "";
+    pointer-events: none;
+}
+
+.project-card:hover .project-image img {
+    transform: scale(1.05);
+}
+
+.project-content {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    height: 100%;
+    padding: 32px;
+}
+
+.project-card:last-child .project-content {
+    justify-content: center;
+    padding: 48px;
+}
+
+.project-content h3 {
+    margin: 8px 0 15px;
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    line-height: 1.12;
+    letter-spacing: -0.035em;
+}
+
+.project-content > p:not(.project-role) {
+    color: var(--text-muted);
+}
+
+.project-content > p + p {
+    margin-top: 12px;
+}
+
+.project-content .project-link {
+    margin-top: auto;
+}
+
+/* =========================================================
+   BACHELOR THESIS
+========================================================= */
+
+#thesis {
+    position: relative;
+}
+
+#thesis::before {
+    position: absolute;
+    top: 80px;
+    right: -120px;
+
+    width: 320px;
+    height: 320px;
+
+    border-radius: 50%;
+
+    background-color: rgba(140, 114, 255, 0.08);
+
+    filter: blur(90px);
+
+    content: "";
+
+    pointer-events: none;
+}
+
+#thesis .section-heading h2 {
+    max-width: 900px;
+}
+
+#thesis .section-description {
+    position: relative;
+    z-index: 1;
+
+    max-width: 760px;
+}
+
+#thesis .resume-grid {
+    position: relative;
+    z-index: 1;
+
+    gap: 26px;
+}
+
+#thesis .resume-column {
+    position: relative;
+
+    overflow: hidden;
+
+    border-color: rgba(255, 101, 195, 0.18);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 101, 195, 0.06),
+            rgba(140, 114, 255, 0.05)
+        ),
+        var(--background-card);
+
+    transition:
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+#thesis .resume-column:hover {
+    border-color: rgba(255, 101, 195, 0.45);
+
+    box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.3);
+
+    transform: translateY(-5px);
+}
+
+#thesis .resume-column::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--accent),
+            var(--accent-purple)
+        );
+
+    content: "";
+}
+
+#thesis .resume-column > h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#thesis .resume-column > h3::before {
+    display: inline-block;
+
+    width: 10px;
+    height: 10px;
+
+    border-radius: 2px;
+
+    background-color: var(--accent);
+
+    box-shadow:
+        0 0 12px rgba(255, 101, 195, 0.45);
+
+    content: "";
+}
+
+#thesis .resume-entry {
+    border-left-color: rgba(140, 114, 255, 0.32);
+}
+
+#thesis .resume-entry::before {
+    background-color: var(--accent-purple);
+}
+
+#thesis .resume-date {
+    color: var(--accent-light);
+}
+
+#thesis .resume-place {
+    color: var(--accent-light);
+}
+
+#thesis .resume-entry p:not(.resume-place) {
+    color: var(--text-muted);
+}
+
+#thesis .resume-entry h4 {
+    color: var(--text);
+
+    font-size: 1.22rem;
+}
+
+#thesis .resume-entry p {
+    max-width: 540px;
+}
+
+/* =========================================================
+   RESUME
+========================================================= */
+
+.resume-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+}
+
+.resume-column {
+    padding: 38px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-medium);
+    background-color: var(--background-card);
+    box-shadow: var(--shadow-small);
+}
+
+    .resume-column > h3 {
+        margin-bottom: 32px;
+        color: var(--accent);
+        font-size: 1.4rem;
+    }
+
+.resume-entry {
+    position: relative;
+    padding-bottom: 38px;
+    padding-left: 27px;
+    border-left: 2px solid rgba(255, 101, 195, 0.22);
+}
+
+    .resume-entry:last-child {
+        padding-bottom: 0;
+    }
+
+    .resume-entry::before {
+        position: absolute;
+        top: 7px;
+        left: -7px;
+        width: 12px;
+        height: 12px;
+        border: 3px solid var(--background-card);
+        border-radius: 50%;
+        background-color: var(--accent);
+        content: "";
+    }
+
+.resume-date {
+    display: inline-block;
+    margin-bottom: 6px;
+    color: var(--accent-light);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+}
+
+.resume-entry h4 {
+    margin-bottom: 3px;
+    font-size: 1.14rem;
+    line-height: 1.35;
+}
+
+.resume-place {
+    margin-bottom: 10px;
+    color: var(--text);
+    font-size: 0.87rem;
+    font-weight: 700;
+}
+
+.resume-entry p:not(.resume-place) {
+    color: var(--text-muted);
+    font-size: 0.94rem;
+}
+
+.resume-downloads {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 40px;
+}
+
+
+/* =========================================================
+   SKILLS
+========================================================= */
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.skill-card {
+    padding: 31px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-medium);
+    background-color: rgba(255, 255, 255, 0.025);
+    transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+    .skill-card:hover {
+        border-color: var(--border-accent);
+        background-color: rgba(255, 101, 195, 0.035);
+        transform: translateY(-5px);
+    }
+
+.skill-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 43px;
+    height: 43px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 101, 195, 0.35);
+    border-radius: var(--radius-small);
+    color: var(--accent);
+    background-color: rgba(255, 101, 195, 0.08);
+    font-size: 0.75rem;
+    font-weight: 800;
+}
+
+.skill-card h3 {
+    margin-bottom: 9px;
+    font-size: 1.22rem;
+}
+
+.skill-card p {
+    color: var(--text-muted);
+}
+
+.tool-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 42px;
+}
+
+    .tool-list span {
+        padding: 10px 16px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        color: var(--text-muted);
+        background-color: var(--background-card);
+        transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+
+        .tool-list span:hover {
+            border-color: var(--border-accent);
+            color: var(--text);
+            transform: translateY(-2px);
+        }
+
+
+/* =========================================================
+   CONTACT
+========================================================= */
+
+.contact-box {
+    padding: clamp(42px, 8vw, 90px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-large);
+    background: linear-gradient( 135deg, rgba(255, 101, 195, 0.13), rgba(140, 114, 255, 0.09) ), var(--background-card);
+    box-shadow: var(--shadow-large);
+    text-align: center;
+}
+
+    .contact-box .section-number,
+    .contact-box .section-label {
+        display: block;
+    }
+
+    .contact-box h2 {
+        max-width: 830px;
+        margin: 14px auto 22px;
+        font-size: clamp(2.6rem, 6.5vw, 5.1rem);
+        line-height: 1;
+        letter-spacing: -0.06em;
+    }
+
+    .contact-box > p:not(.section-number):not(.section-label) {
+        max-width: 640px;
+        margin: 0 auto;
+        color: var(--text-muted);
+    }
+
+.contact-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 36px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 30px;
+    width: min( calc(100% - 40px), var(--content-width) );
+    margin: 0 auto;
+    padding: 38px 0 42px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.footer-logo {
+    color: var(--accent);
+    font-size: 1.18rem;
+    font-weight: 900;
+}
+
+.footer > div:first-child p {
+    margin-top: 3px;
+}
+
+.footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 22px;
+}
+
+    .footer-links a {
+        transition: color 0.2s ease;
+    }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+.copyright {
+    grid-column: 1 / -1;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 0.78rem;
+}
+
+
+/* =========================================================
+   SCROLL REVEAL
+========================================================= */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.75s ease, transform 0.75s ease;
+}
+
+.reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 980px) {
+    .section-heading {
+        grid-template-columns: 140px 1fr;
+    }
+
+    .section-description {
+        margin-left: 175px;
+    }
+
+    .featured-project {
+        grid-template-columns: 1fr;
+    }
+
+    .featured-image {
+        min-height: 500px;
+    }
+
+    .about-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-card {
+        width: min(100%, 470px);
+        margin: 0 auto;
+    }
+
+    .project-card:last-child {
+        display: flex;
+        grid-column: auto;
+    }
+
+        .project-card:last-child .project-image {
+            min-height: 310px;
+        }
+
+        .project-card:last-child .project-content {
+            padding: 32px;
+        }
+
+    .resume-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+/* =========================================================
+   MOBILE NAVIGATION
+========================================================= */
+
+@media (max-width: 780px) {
+    html {
+        scroll-padding-top: 72px;
+    }
+
+    .header-inner {
+        height: 72px;
+    }
+
+    .menu-button {
+        display: block;
+    }
+
+    .navigation {
+        position: fixed;
+        z-index: 1001;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 24px;
+        padding: 90px 24px 40px;
+        background-color: rgba(13, 13, 21, 0.98);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-18px);
+        transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+        .navigation.open {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .navigation a {
+            font-size: 1.45rem;
+        }
+
+            .navigation a::after {
+                bottom: -5px;
+            }
+
+    .hero {
+        min-height: 100svh;
+    }
+
+    .section {
+        width: min( calc(100% - 28px), var(--content-width) );
+        padding: 90px 0;
+    }
+
+    .section-heading {
+        display: block;
+        margin-bottom: 38px;
+    }
+
+        .section-heading > div {
+            margin-bottom: 12px;
+        }
+
+    .section-description {
+        margin-top: -12px;
+        margin-left: 0;
+    }
+
+    .featured-image {
+        min-height: 400px;
+    }
+
+    .project-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .project-card:last-child {
+        grid-column: auto;
+    }
+
+        .project-image,
+        .project-card:last-child .project-image {
+            min-height: 330px;
+        }
+
+    .skills-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .footer {
+        grid-template-columns: 1fr;
+        align-items: start;
+    }
+
+    .footer-links {
+        justify-content: flex-start;
+    }
+
+    .copyright {
+        grid-column: auto;
+    }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 560px) {
+    .hero {
+        padding: 110px 18px 85px;
+    }
+
+    .eyebrow {
+        line-height: 2;
+    }
+
+        .eyebrow span {
+            margin: 0 4px;
+        }
+
+    .hero-title {
+        font-size: clamp(3.4rem, 18vw, 5.6rem);
+    }
+
+    .hero-buttons,
+    .about-buttons,
+    .resume-downloads,
+    .contact-buttons {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .button {
+        width: 100%;
+    }
+
+    .featured-image {
+        min-height: 300px;
+    }
+
+    .featured-content {
+        padding: 30px 24px;
+    }
+
+    .project-details {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .project-image,
+    .project-card:last-child .project-image {
+        min-height: 260px;
+    }
+
+    .project-content,
+    .project-card:last-child .project-content {
+        padding: 25px;
+    }
+
+    .resume-column {
+        padding: 28px 24px;
+    }
+
+    .profile-image,
+    .profile-image img {
+        min-height: 310px;
+    }
+
+    .contact-box {
+        padding: 42px 24px;
+    }
+
+    .footer-links {
+        gap: 15px;
+    }
+
+    .mouse-glow {
+        display: none;
+    }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .reveal {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* =========================================================
+   INKTOBER 2026
+========================================================= */
+
+.inktober-section {
+    position: relative;
+}
+
+.inktober-section::before {
+    position: absolute;
+    top: 160px;
+    left: -180px;
+    width: 360px;
+    height: 360px;
+    border-radius: 50%;
+    background-color: rgba(255, 101, 195, 0.06);
+    content: "";
+    filter: blur(100px);
+    pointer-events: none;
+}
+
+.inktober-intro {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 50px;
+    margin-bottom: 60px;
+}
+
+.inktober-intro-text {
+    max-width: 700px;
+}
+
+.inktober-intro-text p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    line-height: 1.8;
+}
+
+.inktober-intro-text p + p {
+    margin-top: 18px;
+}
+
+.inktober-facts {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.inktober-fact {
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-small);
+    background-color: var(--background-card);
+}
+
+.inktober-fact span {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.inktober-fact strong {
+    color: var(--text);
+    font-size: 0.95rem;
+}
+
+.inktober-gallery {
+    display: grid;
+    gap: 35px;
+}
+
+.inktober-day {
+    padding: 26px;
+    border: 1px solid rgba(255, 101, 195, 0.15);
+    border-radius: var(--radius-medium);
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 101, 195, 0.04),
+            rgba(140, 114, 255, 0.04)
+        ),
+        var(--background-card);
+    box-shadow: var(--shadow-small);
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.inktober-day:hover {
+    border-color: var(--border-accent);
+    box-shadow: var(--shadow-large);
+    transform: translateY(-4px);
+}
+
+.inktober-day-header {
+    margin-bottom: 20px;
+}
+
+.inktober-day-header span {
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.inktober-day-header h3 {
+    margin-top: 5px;
+    color: var(--text);
+    font-size: 1.4rem;
+}
+
+.inktober-comparison {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.inktober-comparison figure {
+    margin: 0;
+}
+
+.inktober-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.025);
+}
+
+.inktober-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.inktober-image.pixel-image img {
+    padding: 25px;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    object-fit: contain;
+}
+
+.inktober-comparison figcaption {
+    margin-top: 10px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+@media (max-width: 800px) {
+    .inktober-intro {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .inktober-facts {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .inktober-comparison {
+        grid-template-columns: 1fr;
+    }
+
+    .inktober-facts {
+        grid-template-columns: 1fr;
+    }
+
+    .inktober-day {
+        padding: 18px;
+    }
+}
 
-<head>
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <meta name="description"
-          content="Portfolio of Kim Fóri, Game Designer, Pixel Artist and Indie Developer from Germany.">
-
-    <meta name="author"
-          content="Kim Fóri">
-
-    <title>Kim F&oacute;ri | Game Design Portfolio</title>
-
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-
-    <!-- Decorative mouse glow -->
-    <div class="mouse-glow" aria-hidden="true"></div>
-
-    <!-- Header -->
-    <header class="header">
-
-        <div class="header-inner">
-
-            <a href="#home" class="logo">
-                Kim F&oacute;ri
-            </a>
-
-            <button class="menu-button"
-                    type="button"
-                    aria-label="Open navigation"
-                    aria-expanded="false"
-                    aria-controls="main-navigation">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-
-            <nav class="navigation"
-                 id="main-navigation"
-                 aria-label="Main navigation">
-
-                <a href="#featured">Featured</a>
-                <a href="#about">About</a>
-                <a href="#projects">Projects</a>
-                <a href="#thesis">Thesis</a>
-                <a href="#resume">Resume</a>
-                <a href="#skills">Skills</a>
-                <a href="#contact">Contact</a>
-
-            </nav>
-
-        </div>
-
-    </header>
-
-    <main>
-
-        <!-- Hero -->
-        <section class="hero" id="home">
-
-            <div class="hero-background" aria-hidden="true">
-                <span class="pixel pixel-one"></span>
-                <span class="pixel pixel-two"></span>
-                <span class="pixel pixel-three"></span>
-                <span class="pixel pixel-four"></span>
-                <span class="pixel pixel-five"></span>
-            </div>
-
-            <div class="hero-content">
-
-                <p class="eyebrow">
-                    Game Design
-                    <span aria-hidden="true">&bull;</span>
-                    Pixel Art
-                    <span aria-hidden="true">&bull;</span>
-                    Indie Development
-                </p>
-
-                <h1 class="hero-title">
-                    Hi, I'm
-                    <span>Kim F&oacute;ri.</span>
-                </h1>
-
-                <p class="hero-description">
-                    I create playful experiences, memorable worlds
-                    and charming pixel art.
-                </p>
-
-                <div class="hero-buttons">
-
-                    <a href="#featured"
-                       class="button button-primary">
-                        Explore my work
-                    </a>
-
-                    <a href="#resume"
-                       class="button button-secondary">
-                        View resume
-                    </a>
-
-                    <a href="#contact"
-                       class="button button-text">
-                        Contact me
-                        <span aria-hidden="true">&rarr;</span>
-                    </a>
-
-                </div>
-
-            </div>
-
-            <a href="#featured"
-               class="scroll-indicator"
-               aria-label="Scroll to featured project">
-                <span></span>
-            </a>
-
-        </section>
-
-
-        <!-- Featured Project -->
-        <section class="section featured-section"
-                 id="featured">
-
-            <div class="section-heading reveal">
-
-                <div>
-                    <p class="section-number">01</p>
-                    <p class="section-label">Featured Project</p>
-                </div>
-
-                <h2>
-                    Candy Crisis
-                </h2>
-
-            </div>
-
-            <article class="featured-project reveal">
-
-                <a href="https://pikakimi30.itch.io/candy-crisis"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="featured-image"
-                   aria-label="Open Candy Crisis on itch.io">
-
-                    <img src="images/candy-crisis.png"
-                         alt="Gameplay screenshot from Candy Crisis">
-
-                    <span class="project-badge">
-                        Solo Project
-                    </span>
-
-                    <span class="image-action">
-                        Play on itch.io
-                        <span aria-hidden="true">&nearr;</span>
-                    </span>
-
-                </a>
-
-                <div class="featured-content">
-
-                    <p class="project-role">
-                        Game Design &bull; Programming &bull; Pixel Art
-                    </p>
-
-                    <h3>
-                        A colourful world built entirely by me.
-                    </h3>
-
-                    <p>
-                        Candy Crisis is a 2D pixel-art platformer that
-                        I designed and developed as a solo project.
-                    </p>
-
-                    <p>
-                        I created the game concept, mechanics, levels,
-                        programming, enemy behaviour, boss fight,
-                        interface and visual assets.
-                    </p>
-
-                    <div class="project-details">
-
-                        <div>
-                            <span>Role</span>
-                            <strong>Solo Developer</strong>
-                        </div>
-
-                        <div>
-                            <span>Engine</span>
-                            <strong>Unity</strong>
-                        </div>
-
-                        <div>
-                            <span>Genre</span>
-                            <strong>2D Platformer</strong>
-                        </div>
-
-                        <div>
-                            <span>Platform</span>
-                            <strong>Browser</strong>
-                        </div>
-
-                    </div>
-
-                    <ul class="project-tags">
-                        <li>Game Design</li>
-                        <li>Unity</li>
-                        <li>Level Design</li>
-                        <li>Pixel Art</li>
-                    </ul>
-
-                    <a href="https://pikakimi30.itch.io/candy-crisis"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="project-link">
-                        Play Candy Crisis
-                        <span aria-hidden="true">&nearr;</span>
-                    </a>
-
-                </div>
-
-            </article>
-
-        </section>
-
-
-        <!-- About -->
-        <section class="section about-section"
-                 id="about">
-
-            <div class="section-heading reveal">
-
-                <div>
-                    <p class="section-number">02</p>
-                    <p class="section-label">About</p>
-                </div>
-
-                <h2>
-                    Creativity meets gameplay.
-                </h2>
-
-            </div>
-
-            <div class="about-layout">
-
-                <div class="about-text reveal">
-
-                    <p class="about-introduction">
-                        I'm a Game Designer, Indie Developer and
-                        Pixel Artist from Germany.
-                    </p>
-
-                    <p>
-                        I hold a Bachelor of Arts in Game Design and enjoy
-                        creating engaging gameplay, expressive pixel-art
-                        worlds and narrative experiences.
-                    </p>
-
-                    <p>
-                        Through solo projects, team projects and game jams,
-                        I have gained experience in game design, level design,
-                        writing, Unity development and 2D art.
-                    </p>
-
-                    <p>
-                        I also enjoy presenting games, sharing creative
-                        processes and connecting with people from the
-                        games industry and community.
-                    </p>
-
-                    <div class="about-buttons">
-
-                        <a href="#projects"
-                           class="button button-primary">
-                            See my projects
-                        </a>
-
-                        <a href="documents/kim-fori-resume-en.pdf"
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           class="button button-secondary">
-                            English resume
-                        </a>
-
-                    </div>
-
-                </div>
-
-                <figure class="profile-card reveal">
-
-                    <div class="profile-image">
-
-                        <img src="images/profile-kim.png"
-                             alt="Portrait of Kim Fóri">
-
-                    </div>
-
-                    <figcaption>
-
-                        <strong>Kim F&oacute;ri</strong>
-
-                        <span>
-                            Game Designer &amp; Pixel Artist
-                        </span>
-
-                    </figcaption>
-
-                </figure>
-
-            </div>
-
-        </section>
-
-
-        <!-- Other Projects -->
-        <section class="section projects-section"
-                 id="projects">
-
-            <div class="section-heading reveal">
-
-                <div>
-                    <p class="section-number">03</p>
-                    <p class="section-label">Selected Work</p>
-                </div>
-
-                <h2>
-                    More projects
-                </h2>
-
-            </div>
-
-            <p class="section-description reveal">
-                A selection of collaborative and game-jam projects
-                in which I worked on pixel art, tilesets and writing.
-            </p>
-
-            <div class="project-grid">
-
-                <!-- Excuse Me, Sir Death -->
-                <article class="project-card reveal">
-
-                    <a href="https://pikakimi30.itch.io/excuse-me-sir-death"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="project-image">
-
-                        <img src="images/excuse-me-sir-death.png"
-                             alt="Gameplay screenshot from Excuse Me, Sir Death">
-
-                        <span class="project-badge">
-                            Game Jam
-                        </span>
-
-                        <span class="image-action">
-                            View project
-                            <span aria-hidden="true">&nearr;</span>
-                        </span>
-
-                    </a>
-
-                    <div class="project-content">
-
-                        <p class="project-role">
-                            Tileset Artist
-                        </p>
-
-                        <h3>
-                            Excuse Me, Sir Death
-                        </h3>
-
-                        <p>
-                            A humorous roguelike platformer created
-                            during a game jam.
-                        </p>
-
-                        <p>
-                            I created tilesets and environmental
-                            pixel-art assets that matched the shared
-                            visual style of the project.
-                        </p>
-
-                        <ul class="project-tags">
-                            <li>Game Jam</li>
-                            <li>Pixel Art</li>
-                            <li>Tilesets</li>
-                            <li>Environment Art</li>
-                        </ul>
-
-                        <a href="https://pikakimi30.itch.io/excuse-me-sir-death"
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           class="project-link">
-                            Play on itch.io
-                            <span aria-hidden="true">&nearr;</span>
-                        </a>
-
-                    </div>
-
-                </article>
-
-
-                <!-- The COUNT is DOWN -->
-                <article class="project-card reveal">
-
-                    <a href="https://pikakimi30.itch.io/thecountisdown"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="project-image">
-
-                        <img src="images/the-count-is-down.png"
-                             alt="Gameplay screenshot from The COUNT is DOWN">
-
-                        <span class="project-badge">
-                            Game Jam
-                        </span>
-
-                        <span class="image-action">
-                            View project
-                            <span aria-hidden="true">&nearr;</span>
-                        </span>
-
-                    </a>
-
-                    <div class="project-content">
-
-                        <p class="project-role">
-                            Writer
-                        </p>
-
-                        <h3>
-                            The COUNT is DOWN
-                        </h3>
-
-                        <p>
-                            A narrative game-jam project in which
-                            I contributed to the writing and
-                            narrative design.
-                        </p>
-
-                        <p>
-                            I developed texts that supported the
-                            humorous and mysterious atmosphere
-                            of the game.
-                        </p>
-
-                        <ul class="project-tags">
-                            <li>Game Jam</li>
-                            <li>Writing</li>
-                            <li>Narrative Design</li>
-                            <li>Teamwork</li>
-                        </ul>
-
-                        <a href="https://pikakimi30.itch.io/thecountisdown"
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           class="project-link">
-                            Play on itch.io
-                            <span aria-hidden="true">&nearr;</span>
-                        </a>
-
-                    </div>
-
-                </article>
-
-
-                <!-- Shrooms TD -->
-                <article class="project-card reveal">
-
-                    <a href="https://melissal.itch.io/shrooms-td"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="project-image">
-
-                        <img src="images/shrooms-td.png"
-                             alt="Gameplay screenshot from Shrooms TD">
-
-                        <span class="project-badge">
-                            Game Jam
-                        </span>
-
-                        <span class="image-action">
-                            View project
-                            <span aria-hidden="true">&nearr;</span>
-                        </span>
-
-                    </a>
-
-                    <div class="project-content">
-
-                        <p class="project-role">
-                            Pixel Artist
-                        </p>
-
-                        <h3>
-                            Shrooms TD
-                        </h3>
-
-                        <p>
-                            A colourful mushroom-themed tower-defence
-                            game created during a game jam.
-                        </p>
-
-                        <p>
-                            I contributed pixel-art assets and helped
-                            shape the visual identity of its mushroom
-                            world.
-                        </p>
-
-                        <ul class="project-tags">
-                            <li>Game Jam</li>
-                            <li>Pixel Art</li>
-                            <li>2D Art</li>
-                            <li>Tower Defence</li>
-                        </ul>
-
-                        <a href="https://melissal.itch.io/shrooms-td"
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           class="project-link">
-                            Play on itch.io
-                            <span aria-hidden="true">&nearr;</span>
-                        </a>
-
-                    </div>
-
-                </article>
-
-            </div>
-
-        </section>
-
-
-        <!-- Bachelor Thesis -->
-        <section class="section resume-section"
-                 id="thesis">
-
-            <div class="section-heading reveal">
-
-                <div>
-                    <p class="section-number">04</p>
-                    <p class="section-label">Bachelor Thesis</p>
-                </div>
-
-                <h2>
-                    Trash Talk vs. Sexism in Competitive Gaming
-                </h2>
-
-            </div>
-
-            <p class="section-description reveal">
-                My bachelor thesis explores where young players draw the
-                line between typical trash talk and sexist behaviour in
-                the voice chat of competitive online games.
-            </p>
-
-            <div class="resume-grid">
-
-                <article class="resume-column reveal">
-
-                    <h3>
-                        Research
-                    </h3>
-
-                    <div class="resume-entry">
-
-                        <span class="resume-date">
-                            Bachelor of Arts in Game Design
-                        </span>
-
-                        <h4>
-                            Player Perception &amp; Voice Chat
-                        </h4>
-
-                        <p class="resume-place">
-                            IU International University of Applied Sciences
-                        </p>
-
-                        <p>
-                            Using scenario-based research, I examined how
-                            language, context and social dynamics influence
-                            whether statements in competitive gaming voice
-                            chat are perceived as trash talk or sexist
-                            behaviour.
-                        </p>
-
-                    </div>
-
-                </article>
-
-                <article class="resume-column reveal">
-
-                    <h3>
-                        Research Focus
-                    </h3>
-
-                    <div class="resume-entry">
-
-                        <span class="resume-date">
-                            Game Studies
-                        </span>
-
-                        <h4>
-                            Topics
-                        </h4>
-
-                        <p class="resume-place">
-                            Online Communication &amp; Player Experience
-                        </p>
-
-                        <p>
-                            The thesis focuses on competitive multiplayer
-                            games, voice-chat culture, toxicity, sexism,
-                            social context and how players evaluate the
-                            boundary between accepted trash talk and
-                            discriminatory behaviour.
-                        </p>
-
-                    </div>
-
-                </article>
-
-            </div>
-
-        </section>
-
-
-        <!-- Resume -->
-        <section class="section resume-section"
-                 id="resume">
-
-            <div class="section-heading reveal">
-
-                <div>
-                    <p class="section-number">05</p>
-                    <p class="section-label">Resume</p>
-                </div>
-
-                <h2>
-                    Education &amp; experience
-                </h2>
-
-            </div>
-
-            <p class="section-description reveal">
-                A brief overview of my education, event experience
-                and work within the games community.
-            </p>
-
-            <div class="resume-grid">
-
-                <!-- Education -->
-                <article class="resume-column reveal">
-
-                    <h3>
-                        Education
-                    </h3>
-
-                    <div class="resume-entry">
-
-                        <span class="resume-date">
-                            2023 &ndash; 2026
-                        </span>
-
-                        <h4>
-                            Bachelor of Arts in Game Design
-                        </h4>
-
-                        <p class="resume-place">
-                            IU International University of Applied Sciences
-                        </p>
-
-                        <p>
-                            Distance-learning degree focused on game design,
-                            interactive media, creative development and
-                            digital production.
-                        </p>
-
-                    </div>
-
-                    <div class="resume-entry">
-
-                        <span class="resume-date">
-                            2020 &ndash; 2022
-                        </span>
-
-                        <h4>
-                            Advanced Technical College Entrance Qualification
-                        </h4>
-
-                        <p class="resume-place">
-                            Adalbert-Raps-Schule, Kulmbach
-                        </p>
-
-                        <p>
-                            Specialisation in Social Studies.
-                        </p>
-
-                    </div>
-
-                </article>
-
-
-                <!-- Experience -->
-                <article class="resume-column reveal">
-
-                    <h3>
-                        Industry &amp; Community Experience
-                    </h3>
-
-                    <div class="resume-entry">
-
-                        <span class="resume-date">
-                            2026
-                        </span>
-
-                        <h4>
-                            Youth Area Lead
-                        </h4>
-
-                        <p class="resume-place">
-                            Gamesfestival des MZM
-                        </p>
-
-                        <p>
-                            Organised and managed a youth-focused festival
-                            area and coordinated activities and participants.
-                        </p>
-
-                    </div>
-
-                    <div class="resume-entry">
-
-                        <span class="resume-date">
-                            2026
-                        </span>
-
-                        <h4>
-                            Exhibitor &amp; Speaker
-                        </h4>
-
-                        <p class="resume-place">
-                            GG Bavaria
-                        </p>
-
-                        <p>
-                            Presented a talk about sexism in gaming,
-                            showcased personal projects and hosted
-                            the workshop “Women in Gaming”.
-                        </p>
-
-                    </div>
-
-                    <div class="resume-entry">
-
-                        <span class="resume-date">
-                            2026
-                        </span>
-
-                        <h4>
-                            Exhibitor
-                        </h4>
-
-                        <p class="resume-place">
-                            Animuc
-                        </p>
-
-                        <p>
-                            Conducted a survey for my bachelor's thesis
-                            and managed the exhibition booth.
-                        </p>
-
-                    </div>
-
-                    <div class="resume-entry">
-
-                        <span class="resume-date">
-                            2026
-                        </span>
-
-                        <h4>
-                            Exhibitor &amp; Panel Participant
-                        </h4>
-
-                        <p class="resume-place">
-                            ComputerSpielAkademie &amp; Gamesfestival
-                        </p>
-
-                        <p>
-                            Presented personal projects and participated
-                            in a panel about livestreaming and content creation.
-                        </p>
-
-                    </div>
-
-                </article>
-
-            </div>
-
-            <div class="resume-downloads reveal">
-
-                <a href="documents/kim-fori-resume-en.pdf"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="button button-primary">
-                    View English resume
-                </a>
-
-                <a href="documents/kim-fori-lebenslauf-de.pdf"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="button button-secondary">
-                    View German CV
-                </a>
-
-            </div>
-
-        </section>
-
-
-        <!-- Skills -->
-        <section class="section skills-section"
-                 id="skills">
-
-            <div class="section-heading reveal">
-
-                <div>
-                    <p class="section-number">06</p>
-                    <p class="section-label">Skills</p>
-                </div>
-
-                <h2>
-                    What I bring to a project
-                </h2>
-
-            </div>
-
-            <div class="skills-grid">
-
-                <article class="skill-card reveal">
-
-                    <span class="skill-number">
-                        01
-                    </span>
-
-                    <h3>
-                        Game Design
-                    </h3>
-
-                    <p>
-                        Gameplay concepts, mechanics, prototyping,
-                        balancing and player-focused design.
-                    </p>
-
-                </article>
-
-
-                <article class="skill-card reveal">
-
-                    <span class="skill-number">
-                        02
-                    </span>
-
-                    <h3>
-                        Level Design
-                    </h3>
-
-                    <p>
-                        Designing spaces, challenges and progression
-                        that support the intended player experience.
-                    </p>
-
-                </article>
-
-
-                <article class="skill-card reveal">
-
-                    <span class="skill-number">
-                        03
-                    </span>
-
-                    <h3>
-                        Pixel Art
-                    </h3>
-
-                    <p>
-                        Tilesets, environments, props, characters,
-                        enemies and simple animations.
-                    </p>
-
-                </article>
-
-
-                <article class="skill-card reveal">
-
-                    <span class="skill-number">
-                        04
-                    </span>
-
-                    <h3>
-                        Development
-                    </h3>
-
-                    <p>
-                        Unity, 2D workflows, UI implementation
-                        and gameplay systems.
-                    </p>
-
-                </article>
-
-
-                <article class="skill-card reveal">
-
-                    <span class="skill-number">
-                        05
-                    </span>
-
-                    <h3>
-                        Narrative Design
-                    </h3>
-
-                    <p>
-                        Writing, dialogue, storytelling, worldbuilding
-                        and narrative integration.
-                    </p>
-
-                </article>
-
-
-                <article class="skill-card reveal">
-
-                    <span class="skill-number">
-                        06
-                    </span>
-
-                    <h3>
-                        Collaboration
-                    </h3>
-
-                    <p>
-                        Experience working in interdisciplinary teams
-                        during game projects and game jams.
-                    </p>
-
-                </article>
-
-            </div>
-
-
-            <div class="tool-list reveal">
-
-                <span>Unity</span>
-                <span>Procreate</span>
-                <span>Nomad Sculpt</span>
-                <span>Microsoft 365</span>
-                <span>Python</span>
-                <span>Pixel Art</span>
-                <span>Game Design</span>
-                <span>Level Design</span>
-                <span>Narrative Design</span>
-                <span>UI Design</span>
-                <span>Git</span>
-
-            </div>
-
-        </section>
-
-
-        <!-- Contact -->
-        <section class="section contact-section"
-                 id="contact">
-
-            <div class="contact-box reveal">
-
-                <p class="section-number">
-                    07
-                </p>
-
-                <p class="section-label">
-                    Contact
-                </p>
-
-                <h2>
-                    Let's create something together.
-                </h2>
-
-                <p>
-                    I'm currently looking for remote job opportunities
-                    in game development. Feel free to contact me about
-                    opportunities or any of my projects.
-                </p>
-
-                <div class="contact-buttons">
-
-                    <a href="mailto:pikakimi30@web.de"
-                       class="button button-primary">
-                        Email me
-                    </a>
-
-                    <a href="https://pikakimi30.itch.io/"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="button button-secondary">
-                        Visit itch.io
-                    </a>
-
-                    <a href="documents/kim-fori-resume-en.pdf"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="button button-secondary">
-                        View resume
-                    </a>
-
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <!-- Footer -->
-    <footer class="footer">
-
-        <div>
-
-            <a href="#home" class="footer-logo">
-                Kim F&oacute;ri
-            </a>
-
-            <p>
-                Game Designer &bull; Pixel Artist &bull; Indie Developer
-            </p>
-
-        </div>
-
-        <div class="footer-links">
-
-            <a href="mailto:pikakimi30@web.de">
-                Email
-            </a>
-
-            <a href="https://pikakimi30.itch.io/"
-               target="_blank"
-               rel="noopener noreferrer">
-                itch.io
-            </a>
-
-            <a href="documents/kim-fori-resume-en.pdf"
-               target="_blank"
-               rel="noopener noreferrer">
-                Resume
-            </a>
-
-            <a href="impressum.html">
-                Legal Notice
-            </a>
-
-            <a href="#home">
-                Back to top
-            </a>
-
-        </div>
-
-        <p class="copyright">
-            &copy; <span id="current-year">2026</span>
-            Kim F&oacute;ri &bull; PikaKimi30
-        </p>
-
-    </footer>
-
-    <script src="script.js"></script>
-
-</body>
-
-</html>
