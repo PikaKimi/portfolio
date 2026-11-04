@@ -2074,3 +2074,56 @@ iframe {
 
 
 
+/* ==========================================
+   MOBILE HEADER FIX
+   ========================================== */
+
+@media (max-width: 780px) {
+
+    .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: calc(100% - 32px);
+        max-width: 100%;
+        margin: 0 auto;
+        min-width: 0;
+    }
+
+    .logo {
+        min-width: 0;
+        max-width: calc(100% - 60px);
+        overflow-wrap: anywhere;
+    }
+
+    .navigation {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-x: hidden;
+    }
+
+    .navigation a {
+        box-sizing: border-box;
+        max-width: 100%;
+    }
+
+    .menu-button {
+        flex-shrink: 0;
+    }
+}
+
