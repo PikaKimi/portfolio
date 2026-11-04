@@ -2000,10 +2000,77 @@ button {
     transform: translateY(0);
 }
 
-/* Fallback: keep portfolio content visible */
+
+/* ==========================================
+   SCROLL ANIMATIONS
+   ========================================== */
+
 .reveal {
     opacity: 1;
     transform: none;
 }
+
+.js-ready .reveal:not(.visible):not(.reveal-visible) {
+    opacity: 0;
+    transform: translateY(35px);
+}
+
+.js-ready .reveal.visible,
+.js-ready .reveal.reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .js-ready .reveal {
+        transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+}
+
+
+/* ==========================================
+   MOBILE HORIZONTAL SCROLL FIX
+   ========================================== */
+
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+}
+
+.section,
+.hero,
+.header,
+.footer {
+    max-width: 100%;
+}
+
+img,
+video,
+iframe {
+    max-width: 100%;
+}
+
+@media (max-width: 780px) {
+    .featured-project,
+    .project-grid,
+    .inktober-gallery,
+    .about-layout,
+    .resume-grid,
+    .skills-grid {
+        min-width: 0;
+    }
+
+    .featured-project > *,
+    .project-grid > *,
+    .inktober-gallery > *,
+    .about-layout > *,
+    .resume-grid > *,
+    .skills-grid > * {
+        min-width: 0;
+    }
+}
+
 
 
