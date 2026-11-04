@@ -1990,3 +1990,20 @@ button {
 }
 
 
+/* ==========================================
+   FIX: INVISIBLE SECTIONS
+   ========================================== */
+
+.reveal.visible,
+.reveal.reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Fallback: keep portfolio content visible */
+.reveal {
+    opacity: 1;
+    transform: none;
+}
+
+
