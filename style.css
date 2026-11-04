@@ -1891,3 +1891,45 @@ button {
         font-size: 0.78rem;
     }
 }
+
+
+/* =========================================================
+   CANDY CRISIS GAMEPLAY VIDEO
+========================================================= */
+
+.featured-image {
+    position: relative;
+    overflow: hidden;
+}
+
+.featured-video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    image-rendering: auto;
+}
+
+/* Keep badges and links above the video */
+
+.featured-image .project-badge,
+.featured-image .image-action {
+    position: absolute;
+    z-index: 2;
+}
+
+/* Accessibility: reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+    .featured-video {
+        display: none;
+    }
+
+    .featured-image {
+        background-image: url("images/candy-crisis.png");
+        background-size: cover;
+        background-position: center;
+    }
+}
+
+
