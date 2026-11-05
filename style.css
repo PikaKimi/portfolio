@@ -2127,3 +2127,52 @@ iframe {
     }
 }
 
+
+/* ==========================================
+   FINAL SCROLL REVEAL FIX
+   ========================================== */
+
+.reveal {
+    opacity: 1;
+    transform: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+    html.js-ready .reveal:not(.reveal-visible) {
+        opacity: 0;
+        transform: translateY(35px);
+    }
+
+    html.js-ready .reveal.reveal-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    html.js-ready .reveal {
+        transition:
+            opacity 0.7s ease,
+            transform 0.7s ease;
+    }
+
+    html.js-ready .reveal-delay-1 {
+        transition-delay: 0.1s;
+    }
+
+    html.js-ready .reveal-delay-2 {
+        transition-delay: 0.2s;
+    }
+
+    html.js-ready .reveal-delay-3 {
+        transition-delay: 0.3s;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+}
