@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Candy Crisis: a solo-developed 2D platformer. Explore the game design process, iteration, playtesting and final result by Kim Fóri.">
+  <title>Candy Crisis — Game Design Case Study | Kim Fóri</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Scoped case-study styling; existing portfolio style.css remains unchanged. */
+    .case-study{max-width:1120px;margin:0 auto;padding:110px 24px 100px}
+    .case-top{display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap;margin-bottom:65px}
+    .case-back{color:inherit;text-decoration:none;opacity:.85}.case-back:hover{opacity:1}
+    .case-eyebrow{text-transform:uppercase;letter-spacing:.16em;font-size:.8rem;opacity:.72;margin:0 0 18px}
+    .case-title{font-size:clamp(3.2rem,8vw,6.5rem);line-height:1.02;margin:0 0 22px}
+    .case-lead{font-size:clamp(1.08rem,2vw,1.35rem);max-width:760px;line-height:1.7;opacity:.85}
+    .case-meta{display:flex;flex-wrap:wrap;gap:12px;margin:30px 0 40px}
+    .case-meta span{padding:10px 16px;border:1px solid rgba(160,160,180,.3);border-radius:30px;font-size:.88rem}
+    .case-media{border-radius:18px;overflow:hidden;border:1px solid rgba(160,160,180,.2);background:#15131f}
+    .case-media video,.case-media img{display:block;width:100%;height:auto}
+    .case-media video{aspect-ratio:16/9;object-fit:contain}
+    .case-section{padding:80px 0;border-bottom:1px solid rgba(160,160,180,.2)}
+    .case-section h2{font-size:clamp(1.9rem,4vw,3rem);margin:0 0 24px}
+    .case-section p{max-width:780px;line-height:1.8;opacity:.86}
+    .case-kicker{letter-spacing:.12em;text-transform:uppercase;font-size:.8rem;opacity:.65;margin-bottom:12px}
+    .case-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin-top:32px}
+    .case-panel{border:1px solid rgba(160,160,180,.24);border-radius:16px;padding:26px;background:rgba(150,140,180,.045)}
+    .case-panel h3{margin:0 0 12px;font-size:1.2rem}.case-panel p{margin:0}
+    .case-list{padding-left:22px;line-height:1.9;opacity:.86}
+    .case-quote{font-size:clamp(1.2rem,2.5vw,1.65rem);line-height:1.5;max-width:850px}
+    .case-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:28px}
+    .case-note{font-size:.85rem;opacity:.68;line-height:1.6;margin-top:14px}
+    .case-phase{display:grid;grid-template-columns:130px 1fr;gap:22px;padding:24px 0;border-bottom:1px solid rgba(160,160,180,.18)}
+    .case-phase strong{color:#efb1e6;font-size:.95rem}.case-phase h3{margin:0 0 8px}.case-phase p{margin:0}
+    .case-highlight{border-left:3px solid #e6a4dd;padding:8px 0 8px 22px;margin:28px 0}
+    .case-highlight p{margin:0}.case-caption{font-size:.82rem;opacity:.7;margin:10px 0 0}
+    .case-figure{margin:32px 0 0;max-width:800px}.case-figure img{width:100%;height:auto;display:block;border-radius:16px;border:1px solid rgba(160,160,180,.22)}
+    .case-footer{padding:48px 0 0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;opacity:.8}
+    @media(max-width:700px){.case-study{padding:45px 20px 70px}.case-grid{grid-template-columns:1fr}.case-section{padding:55px 0}.case-top{margin-bottom:45px}.case-phase{grid-template-columns:1fr;gap:8px}}
+    @media(prefers-reduced-motion:reduce){.case-media video{display:none}.case-media{background:transparent url('images/candy-crisis.png') center/cover;aspect-ratio:16/9}}
+
+    /* Candy-inspired colour refresh: layout and content remain unchanged. */
+    body{background:radial-gradient(ellipse 75% 30% at 92% 8%,rgba(164,105,218,.13),transparent 70%),radial-gradient(ellipse 65% 35% at 4% 52%,rgba(255,142,194,.07),transparent 70%),#0d0c16;color:#f7f2fc}
+    .case-study{color:#e6dfee}
+    .case-back{color:#e8b7ff;opacity:1;transition:color .2s ease}
+    .case-back:hover{color:#ffc0db}
+    .case-eyebrow,.case-kicker{color:#f5a8d6;opacity:1;font-weight:700}
+    .case-title{color:#fff1fa;letter-spacing:-.045em;text-shadow:0 3px 34px rgba(242,137,207,.15)}
+    .case-lead{color:#d8cde5;opacity:1}
+    .case-meta span{color:#f2d8ff;border-color:rgba(218,165,247,.36);background:rgba(183,111,219,.085)}
+    .case-section{border-bottom-color:rgba(207,157,235,.2)}
+    .case-section h2{color:#f6c1e5;letter-spacing:-.025em}
+    .case-section p{color:#d8cfe4;opacity:1}
+    .case-section h3{color:#f8e7ff}
+    .case-panel{background:linear-gradient(140deg,rgba(193,130,222,.12),rgba(251,150,198,.045));border-color:rgba(214,165,238,.25);box-shadow:0 8px 30px rgba(0,0,0,.09)}
+    .case-panel p{color:#d9d0e5}
+    .case-phase{border-bottom-color:rgba(207,157,235,.18)}
+    .case-phase strong{color:#f3a7d2}
+    .case-list{color:#d9d0e5;opacity:1}
+    .case-highlight{border-left-color:#f5a8d6;background:linear-gradient(90deg,rgba(243,160,209,.07),transparent)}
+    .case-quote{color:#ffe0f1!important;font-weight:600}
+    .case-note,.case-caption{color:#bcaeca!important;opacity:1}
+    .case-media,.case-figure img{border-color:rgba(220,162,232,.35);box-shadow:0 16px 48px rgba(0,0,0,.2)}
+    .case-actions .button{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:700;transition:transform .2s ease,background .2s ease}
+    .case-actions .button:hover{transform:translateY(-2px)}
+    .case-actions .button-primary{background:#eaa6d5;color:#211227;border:1px solid #eaa6d5}
+    .case-actions .button-primary:hover{background:#ffc3e6;color:#211227}
+    .case-actions .button-secondary{background:rgba(184,129,222,.09);color:#f0c8ff;border:1px solid rgba(219,162,240,.5)}
+    .case-actions .button-secondary:hover{background:rgba(184,129,222,.2)}
+    .case-footer{color:#c9bcd7;opacity:1}
+    a:focus-visible{outline:3px solid #f3a7d2;outline-offset:4px}
+    @media(prefers-reduced-motion:reduce){.case-back,.case-actions .button{transition:none}.case-actions .button:hover{transform:none}}
+  </style>
+</head>
+<body>
+  <main class="case-study">
+    <nav class="case-top" aria-label="Project navigation">
+      <a class="case-back" href="index.html#featured">← Back to portfolio</a>
+      <a class="case-back" href="https://pikakimi30.itch.io/candy-crisis" target="_blank" rel="noopener noreferrer">Play on itch.io ↗</a>
+    </nav>
+    <header>
+      <p class="case-eyebrow">Game Design Case Study · Solo Project</p>
+      <h1 class="case-title">Candy Crisis</h1>
+      <p class="case-lead">A colourful 2D platformer built in Unity. This solo project taught me to connect level design decisions with player feedback. The strongest example is how playtesting led me to rethink navigation and introduce a clearer MiniMap.</p>
+      <div class="case-meta"><span>Role: Solo Developer</span><span>Engine: Unity</span><span>Genre: 2D Platformer</span><span>Focus: Level Design &amp; Player Guidance</span><span>Process: 3 documented phases</span><span>Testing: 4 playtests</span></div>
+    </header>
+    <div class="case-media">
+      <video autoplay muted loop playsinline controls preload="metadata" poster="images/candy-crisis.png" aria-label="Candy Crisis gameplay preview">
+        <source src="videos/candy-crisis-preview.mp4" type="video/mp4">
+        Your browser does not support video playback.
+      </video>
+    </div>
+    <p class="case-note">Gameplay preview · Video can be paused using the player controls.</p>
+
+    <section class="case-section" aria-labelledby="overview">
+      <p class="case-kicker">01 / Overview</p><h2 id="overview">The game</h2>
+      <p>Candy Crisis combines running, jumping, double jumping and ranged attacks with a playful candy-themed world. Players explore the level, find a key, unlock the path to the boss and complete the game by winning the final fight.</p>
+      <p>I worked on the game concept, mechanics, level design, enemy behaviour, boss encounter, interface, programming and pixel-art assets.</p>
+    </section>
+
+    <section class="case-section" aria-labelledby="process">
+      <p class="case-kicker">02 / Development Process</p>
+      <h2 id="process">From first concept to finished game</h2>
+      <p>I documented the development of Candy Crisis in three phases. Each phase had a different focus: establishing the core idea, developing and testing the playable experience, and refining the final version.</p>
+      <div class="case-phase"><strong>Phase 01</strong><div><h3>Concept &amp; prototype</h3><p>I defined the game concept, target audience, core mechanics and visual direction. Moodboards and design guidelines helped establish a consistent candy-inspired world, while an early prototype tested the basic gameplay.</p></div></div>
+      <div class="case-phase"><strong>Phase 02</strong><div><h3>Implementation &amp; iteration</h3><p>I developed the levels, enemies, key-and-door progression and boss encounter, then used early feedback to identify areas that needed clearer guidance and better balancing.</p></div></div>
+      <div class="case-phase"><strong>Phase 03</strong><div><h3>Playtesting &amp; finalisation</h3><p>I refined the MiniMap, adjusted level challenges and enemy placement, polished the interface and completed the final playable version.</p></div></div>
+    </section>
+
+    <section class="case-section" aria-labelledby="concept">
+      <p class="case-kicker">03 / Concept &amp; Art Direction</p><h2 id="concept">A sweet world with clear rules</h2>
+      <p>The visual direction uses bright colours, rounded shapes and readable silhouettes. The boss encounter deliberately contrasts with this friendly world through a stronger sense of danger and tension.</p>
+      <div class="case-grid">
+        <div class="case-panel"><h3>Design goals</h3><p>Accessible controls, clear objectives and a level structure that helps players understand where to go next.</p></div>
+        <div class="case-panel"><h3>Visual direction</h3><p>Colourful candy-inspired environments, legible characters, a restrained interface and more dramatic cues during important moments.</p></div>
+      </div>
+      <p class="case-note">The original research moodboards contain third-party reference images. They are not reproduced here; selected original screenshots or properly licensed references can be added later.</p>
+    </section>
+
+    <section class="case-section" aria-labelledby="systems">
+      <p class="case-kicker">04 / Gameplay &amp; Level Design</p><h2 id="systems">Building the player journey</h2>
+      <p>The player journey links movement challenges to a clear objective: explore, find the key, open the locked route and face the boss. I used enemy placement, jumps and progression gates to give each part of that journey a different purpose.</p>
+      <div class="case-grid">
+        <div class="case-panel"><h3>Movement &amp; combat</h3><p>Running, jumping, double jumping and shooting provide the core actions for navigating obstacles and dealing with enemies.</p></div>
+        <div class="case-panel"><h3>Enemies &amp; hazards</h3><p>Patrolling enemies, rolling enemies and contact hazards create challenges along the route.</p></div>
+        <div class="case-panel"><h3>Progression</h3><p>Finding the key and reaching the locked door lead players toward the final boss encounter.</p></div>
+        <div class="case-panel"><h3>Finale</h3><p>The boss has its own health bar and attacks. A separate win scene makes completing the game feel like a clear achievement.</p></div>
+      </div>
+    </section>
+
+    <section class="case-section" aria-labelledby="iteration">
+      <p class="case-kicker">05 / Iteration &amp; Playtesting</p><h2 id="iteration">Case Study: Helping players find their way</h2>
+      <p>Early playtests suggested that the core mechanics were understandable, but feedback also highlighted a navigation problem: in some vertical passages, players could not immediately tell whether the level continued upward or downward.</p>
+      <p>Instead of introducing another gameplay mechanic, I added a simple MiniMap. It shows the player’s position and the level’s direction, supporting orientation without taking over the screen.</p>
+      <div class="case-highlight"><p><strong>Four documented playtests</strong> with different participants, lasting approximately 8–15 minutes each, helped me evaluate orientation, difficulty and overall game feel.</p></div>
+      <p>In the final version, the MiniMap also includes markers for important goals such as the key, the door and the boss. I revised jump challenges, enemy positions and boss balancing in response to testing.</p>
+      <p class="case-note"><strong>Design question:</strong> How can a platformer communicate its route without interrupting the action?</p>
+      <div class="case-grid">
+        <div class="case-panel"><h3>Problem</h3><p>Vertical level transitions were not always easy to read.</p></div>
+        <div class="case-panel"><h3>Design response</h3><p>A minimal MiniMap to make the level structure and player position clearer.</p></div>
+        <div class="case-panel"><h3>Test feedback</h3><p>Follow-up testing indicated that players understood the level structure more quickly and found vertical transitions clearer.</p></div>
+        <div class="case-panel"><h3>What I learned</h3><p>Improving player guidance can make a bigger difference than adding more features.</p></div>
+      </div>
+      <figure class="case-figure" style="margin-top: 28px;">
+        <img src="images/candy-minimap-phase3.png" alt="Original MiniMap from the finalisation phase of Candy Crisis, showing the level route and gameplay markers" loading="lazy" style="width: min(100%, 680px); height: auto; margin-inline: auto; image-rendering: auto;">
+        <figcaption class="case-caption">Original MiniMap from my Phase 3 project documentation. In Phase 2, I introduced the map to clarify the level route; in Phase 3, I expanded it with markers for the key, door and boss.</figcaption>
+      </figure>
+    </section>
+
+    <section class="case-section" aria-labelledby="polish">
+      <p class="case-kicker">06 / Polish &amp; Reflection</p><h2 id="polish">Making the experience feel complete</h2>
+      <p>I refined the presentation of key moments through interface elements, scene transitions and audio feedback. The win scene was also expanded with a small animation featuring Blue as an Easter egg after the boss fight.</p>
+      <p class="case-quote">“I learned that good game design is not about the number of features, but about what those features do for the player.”</p>
+      <p>Working on Candy Crisis helped me improve my Unity and UI workflow, and taught me to pay closer attention to player feedback, readability and scope. The MiniMap iteration was particularly valuable: it showed me that an interface change can solve a level-design communication problem without adding complexity to the core controls.</p>
+    </section>
+
+    <section class="case-section" aria-labelledby="documentation">
+      <p class="case-kicker">07 / Design Documentation</p>
+      <h2 id="documentation">Showing the work behind the game</h2>
+      <p>My project documentation includes concept development, moodboards with source references, gameplay and level-design decisions, playtesting notes, and changes made during finalisation. These materials show how the design evolved rather than just presenting the finished game.</p>
+      <div class="case-grid">
+        <div class="case-panel"><h3>Concept &amp; visual references</h3><p>Early moodboards and design guidelines established the intended tone and visual consistency. Third-party reference images are not reproduced on this page.</p></div>
+        <div class="case-panel"><h3>Implementation &amp; feedback</h3><p>Gameplay systems, UI decisions, MiniMap changes and testing results document the move from prototype to final build.</p></div>
+      </div>
+      <figure class="case-figure"><img src="images/candy-crisis.png" alt="Candy Crisis gameplay screenshot showing the final game's visual style" loading="lazy"><figcaption class="case-caption">Screenshot from the finished game. The development documentation also covers earlier concepts, implementation and testing.</figcaption></figure>
+      <p class="case-note">The original university documents contain personal academic details and are therefore not published here.</p>
+    </section>
+
+    <section class="case-section" aria-labelledby="result">
+      <p class="case-kicker">08 / Final Result</p><h2 id="result">Play Candy Crisis</h2>
+      <p>The result is a complete, playable 2D platformer with a candy-themed world, multiple enemy types, a boss fight and a clear ending. More importantly, the project documents how feedback shaped player guidance, difficulty and the final experience.</p>
+      <div class="case-actions">
+        <a class="button button-primary" href="https://pikakimi30.itch.io/candy-crisis" target="_blank" rel="noopener noreferrer">Play on itch.io ↗</a>
+        <a class="button button-secondary" href="index.html#projects">More projects</a>
+      </div>
+    </section>
+    <footer class="case-footer"><span>Kim Fóri · Game Designer &amp; Pixel Artist</span><a class="case-back" href="index.html">Back to portfolio ↑</a></footer>
+  </main>
+</body>
+</html>
