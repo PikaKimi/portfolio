@@ -1,3 +1,4 @@
+
 "use strict";
 
 /* =========================================================
@@ -14,6 +15,9 @@ const revealElements = document.querySelectorAll(".reveal");
 const mouseGlow = document.querySelector(".mouse-glow");
 const currentYear = document.querySelector("#current-year");
 
+const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+).matches;
 
 /* =========================================================
    CURRENT YEAR
@@ -22,7 +26,6 @@ const currentYear = document.querySelector("#current-year");
 if (currentYear) {
     currentYear.textContent = new Date().getFullYear();
 }
-
 
 /* =========================================================
    HEADER SCROLL EFFECT
@@ -33,11 +36,10 @@ function updateHeader() {
         return;
     }
 
-    if (window.scrollY > 30) {
-        header.classList.add("header-scrolled");
-    } else {
-        header.classList.remove("header-scrolled");
-    }
+    header.classList.toggle(
+        "header-scrolled",
+        window.scrollY > 30
+    );
 }
 
 window.addEventListener("scroll", updateHeader, {
@@ -45,7 +47,6 @@ window.addEventListener("scroll", updateHeader, {
 });
 
 updateHeader();
-
 
 /* =========================================================
    MOBILE MENU
@@ -109,20 +110,55 @@ window.addEventListener("resize", () => {
     }
 });
 
-
 /* =========================================================
-   SCROLL REVEAL
+   SCROLL REVEAL ANIMATIONS
 ========================================================= */
 
-const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-).matches;
+/*
+   The js-ready class enables CSS reveal animations.
+   Without JavaScript, content remains visible.
+*/
 
-if (prefersReducedMotion) {
+function initializeRevealAnimations() {
+    if (!revealElements.length) {
+        return;
+    }
+
+    if (
+        prefersReducedMotion ||
+        !("IntersectionObserver" in window)
+    ) {
+        revealElements.forEach((element) => {
+            element.classList.add("reveal-visible");
+            element.classList.add("visible");
+        });
+
+        return;
+    }
+
+    /*
+       Elements already visible on initial load should
+       not disappear or flash.
+    */
+
     revealElements.forEach((element) => {
-        element.classList.add("reveal-visible");
+        const bounds = element.getBoundingClientRect();
+
+        if (
+            bounds.top < window.innerHeight &&
+            bounds.bottom > 0
+        ) {
+            element.classList.add("reveal-visible");
+            element.classList.add("visible");
+        }
     });
-} else {
+
+    /*
+       Enable CSS animation states.
+    */
+
+    document.documentElement.classList.add("js-ready");
+
     const revealObserver = new IntersectionObserver(
         (entries, observer) => {
             entries.forEach((entry) => {
@@ -131,56 +167,66 @@ if (prefersReducedMotion) {
                 }
 
                 entry.target.classList.add("reveal-visible");
+                entry.target.classList.add("visible");
+
                 observer.unobserve(entry.target);
             });
         },
         {
-            threshold: 0.12,
-            rootMargin: "0px 0px -60px 0px"
+            threshold: 0.08,
+            rootMargin: "0px 0px -30px 0px"
         }
     );
 
     revealElements.forEach((element) => {
-        revealObserver.observe(element);
+        if (!element.classList.contains("reveal-visible")) {
+            revealObserver.observe(element);
+        }
     });
 }
 
+initializeRevealAnimations();
 
 /* =========================================================
    ACTIVE NAVIGATION LINK
 ========================================================= */
 
-const sectionObserver = new IntersectionObserver(
-    (entries) => {
-        entries.forEach((entry) => {
-            if (!entry.isIntersecting) {
-                return;
-            }
+if ("IntersectionObserver" in window) {
+    const sectionObserver = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) {
+                    return;
+                }
 
-            const activeSection = entry.target.id;
+                const activeSection = entry.target.id;
 
-            navigationLinks.forEach((link) => {
-                const target = link
-                    .getAttribute("href")
-                    .replace("#", "");
+                navigationLinks.forEach((link) => {
+                    const href = link.getAttribute("href") || "";
 
-                link.classList.toggle(
-                    "active",
-                    target === activeSection
-                );
+                    if (!href.startsWith("#")) {
+                        return;
+                    }
+
+                    const target = href.slice(1);
+
+                    link.classList.toggle(
+                        "active",
+                        target === activeSection
+                    );
+                });
             });
-        });
-    },
-    {
-        rootMargin: "-35% 0px -55% 0px",
-        threshold: 0
-    }
-);
+        },
+        {
+            rootMargin: "-35% 0px -55% 0px",
+            threshold: 0
+        }
+    );
 
-sections.forEach((section) => {
-    sectionObserver.observe(section);
-});
-
+    sections.forEach((section) => {
+        sectionObserver.observe(section);
+    });
+}
 
 /* =========================================================
    MOUSE GLOW
@@ -216,7 +262,6 @@ if (mouseGlow && !prefersReducedMotion) {
 
     animateMouseGlow();
 }
-
 
 /* =========================================================
    PROJECT IMAGE TILT
@@ -257,7 +302,6 @@ if (!prefersReducedMotion) {
     });
 }
 
-
 /* =========================================================
    SMOOTH INTERNAL LINKS
 ========================================================= */
@@ -274,13 +318,17 @@ internalLinks.forEach((link) => {
             return;
         }
 
-        const targetElement = document.querySelector(targetId);
+        const targetElement = document.getElementById(
+            targetId.slice(1)
+        );
 
         if (!targetElement) {
             return;
         }
 
         event.preventDefault();
+
+        closeMenu();
 
         targetElement.scrollIntoView({
             behavior: prefersReducedMotion ? "auto" : "smooth",
